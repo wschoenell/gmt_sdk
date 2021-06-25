@@ -8,6 +8,10 @@ release.
 
 Running locally (requires docker)
 ---------------------------------
+
     export PAT="" # put a valid Personal Access Token
+    # Build SDK
     docker build -t gmt_sdk .
     docker run -e PAT -v $PWD/github/workspace/:/github/workspace/ gmt_sdk /module/create_build.sh 1.9.0 20210625-caa849b
+    # Test SDK
+    docker run -e PAT -v $PWD/github/workspace/:/github/workspace/ gmt_sdk /module/test_build.sh 1.9.0 20210625-caa849b
