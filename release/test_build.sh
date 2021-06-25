@@ -47,38 +47,38 @@ cp "$GMT_GLOBAL/etc/bundles/ocs_local_bundle.coffee" "$GMT_LOCAL/etc/bundles/"
 # Quick test on the Framework scripts
 fwk_version=$(echo $VERSION | cut -f1-2 -d.)
 echo "Testing alarm_server version"
-[ $(alarm_server --version) == $fwk_version ]
+[[ $(alarm_server --version) == $fwk_version || $RC != "" ]] || exit 1
 echo "Testing alarm_client version"
-[ $(alarm_client --version) == $fwk_version ]
+[[ $(alarm_client --version) == $fwk_version || $RC != "" ]] || exit 1
 echo "Testing conf_server version"
-[ $(conf_server --version) == $fwk_version ]
+[[ $(conf_server --version) == $fwk_version || $RC != "" ]] || exit 1
 echo "Testing conf_client version"
-[ $(conf_client --version) == $fwk_version ]
+[[ $(conf_client --version) == $fwk_version || $RC != "" ]] || exit 1
 echo "Testing data_client version"
-[ $(data_client --version) == $fwk_version ]
+[[ $(data_client --version) == $fwk_version || $RC != "" ]] || exit 1
 echo "Testing data_server version"
-[ $(data_server --version) == $fwk_version ]
+[[ $(data_server --version) == $fwk_version || $RC != "" ]] || exit 1
 echo "Testing log_server version"
-[ $(log_server --version) == $fwk_version ]
+[[ $(log_server --version) == $fwk_version || $RC != "" ]] || exit 1
 echo "Testing log_client version"
-[ $(log_client --version) == $fwk_version ]
+[[ $(log_client --version) == $fwk_version || $RC != "" ]] || exit 1
 echo "Testing sup_server version"
-[ $(sup_server --version) == $fwk_version ]
+[[ $(sup_server --version) == $fwk_version || $RC != "" ]] || exit 1
 echo "Testing sup_client version"
-[ $(sup_client --version) == $fwk_version ]
+[[ $(sup_client --version) == $fwk_version || $RC != "" ]] || exit 1
 echo "Testing tele_server version"
-[ $(tele_server --version) == $fwk_version ]
+[[ $(tele_server --version) == $fwk_version || $RC != "" ]] || exit 1
 echo "Testing tele_client version"
-[ $(tele_client --version) == $fwk_version ]
+[[ $(tele_client --version) == $fwk_version || $RC != "" ]] || exit 1
 
 echo "Testing gds version"
-[ $(gds --version) == $fwk_version ]
+[[ $(gds --version) == $fwk_version || $RC != "" ]] || exit 1
 echo "Testing grs version"
-[ $(grs --version) == $fwk_version ]
+[[ $(grs --version) == $fwk_version || $RC != "" ]] || exit 1
 echo "Testing gsq version"
-[ $(gsq --version) == $fwk_version ]
+[[ $(gsq --version) == $fwk_version || $RC != "" ]] || exit 1
 echo "Testing gtr version"
-[ $(gtr --version) == $fwk_version ]
+[[ $(gtr --version) == $fwk_version || $RC != "" ]] || exit 1
 
 # test gds
 gds init tt123_dcs
