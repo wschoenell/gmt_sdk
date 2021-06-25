@@ -1,0 +1,58 @@
+on: [push, pull_request]
+
+jobs:
+  gmt_checks:
+    runs-on: ubuntu-latest
+    name: GMT SDK build
+    env:
+      PAT: ${{ secrets.PAT }}
+      version: "1.9.0"
+      # Add pull request numbers separated by commas (,) below
+      ocs_core_fwk_pull_requests: ""
+      ocs_dev_fwk_pull_requests: ""
+      ocs_sys_pull_requests: ""
+      ocs_ctrl_fwk_pull_requests: ""
+      ocs_dp_fwk_pull_requests: ""
+      ocs_io_fwk_pull_requests: "140"
+      ocs_pers_fwk_pull_requests: ""
+      ocs_test_fwk_pull_requests: ""
+      ocs_ui_fwk_pull_requests: ""
+      # services
+      ocs_log_sys_pull_requests: ""
+      ocs_alarm_sys_pull_requests: ""
+      ocs_tele_sys_pull_requests: ""
+      ocs_conf_sys_pull_requests: ""
+      ocs_sup_sys_pull_requests: ""
+      ocs_da_sys_pull_requests: ""
+      ocs_app_sys_pull_requests: ""
+      ocs_seq_sys_pull_requests: ""
+      # ext libraries
+      ocs_nanomsg_ext_pull_requests: ""
+      ocs_msgpack_ext_pull_requests: ""
+    steps:
+      # To use this repository's private action,
+      # you must check out the repository
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Copy CI Files
+        run: cp -fr release/* .
+      - name: Get release name
+        id: release_name
+        run: echo "::set-output name=release_id::$(date +'%Y%m%d')-${GITHUB_SHA::7}"
+      - name: 'GMT SDK distribution'
+        id: build_release
+        uses: ./
+        with:
+          args: /module/create_build.sh ${{ env.version }} ${{ steps.release_name.outputs.release_id }} # version date-commit
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v2
+        with:
+          name: gmt-sdk-${{ env.version }}.${{ steps.release_name.outputs.release_id }}.tar.gz
+          path: ${{ github.workspace }}/gmt-sdk-${{ env.version }}.${{ steps.release_name.outputs.release_id }}.tar.gz
+          retention-days: 30
+      - name: 'GMT SDK test'
+        id: test_release
+        uses: ./
+        with:
+          args: /module/test_build.sh ${{ env.version }} ${{ steps.release_name.outputs.release_id }} # version date-commit
+
