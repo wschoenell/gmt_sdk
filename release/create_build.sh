@@ -137,15 +137,15 @@ do
 done
 cd ..
 
-git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_ui_fwk
-# Checkout pull requests
-cd ocs_ui_fwk
-for id in $(echo $ocs_ui_fwk_pull_requests | sed 's/,/\n/g')
-do
-    echo -e "$CL Checking pull request #$id $NC"
-    git pull --no-edit origin pull/$id/head
-done
-cd ..
+#git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_ui_fwk
+## Checkout pull requests
+#cd ocs_ui_fwk
+#for id in $(echo $ocs_ui_fwk_pull_requests | sed 's/,/\n/g')
+#do
+#    echo -e "$CL Checking pull request #$id $NC"
+#    git pull --no-edit origin pull/$id/head
+#done
+#cd ..
 
 
 echo -e "$CL Cloning core services $NC"
@@ -240,12 +240,12 @@ echo -e "$CL Node Core Fwk build DONE $NC"
 echo -e "$CL Copying Python version of the core frameworks and services $NC"
 cp -fr $MODULES/ocs_core_fwk/src/py/ $BASE_DIR/lib/
 
-# Build the UI Framework
-echo -e "$CL Building: ocs_ui_fwk $NC"
-cd $MODULES
-cd ocs_ui_fwk
-coffee build_ui_fwk.coffee
-echo -e "$CL Node UI Fwk build DONE $NC"
+## Build the UI Framework
+#echo -e "$CL Building: ocs_ui_fwk $NC"
+#cd $MODULES
+#cd ocs_ui_fwk
+#coffee build_ui_fwk.coffee
+#echo -e "$CL Node UI Fwk build DONE $NC"
 
 ## Checkout and build nanomsg for C++
 echo -e "$CL Cloning: ocs_nanomsg_ext $NC"
@@ -349,7 +349,7 @@ cp swc_isample_example.pdf $DOCS
 cp swc_map_model_cpp.pdf $DOCS
 cp swc_modeling_guidelines.pdf $DOCS
 cp swc_test_guidelines.pdf $DOCS
-cp swc_ui_fwk_guidelines.pdf $DOCS
+#cp swc_ui_fwk_guidelines.pdf $DOCS
 
 # create distribution directory
 echo -e "$CL Creating SDK distribution: $SDK_DIST_DIR $NC"
