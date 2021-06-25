@@ -1,8 +1,5 @@
 #!/usr/bin/bash
 # Script to semi-automate the integration and build process
-# SDK Version: 1.8.2
-# Date: 2020-09-17
-# Purpose: Updated I/O Fwk (EtherCAT)
 set -e
 
 VERSION=$1
@@ -304,7 +301,6 @@ export PYTHONPATH=$PYTHONPATH:$GMT_GLOBAL/lib/py/
 
 echo -e "$CL Cloning: nnpy Python Library $NC"
 cd $MODULES
-#git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_msgpack_ext
 git clone https://github.com/wschoenell/nnpy.git
 echo -e "$CL Building: nnpy Python Library $NC"
 cd nnpy
@@ -314,7 +310,6 @@ pip3 install . --target $GMT_GLOBAL/lib/py/
 
 echo -e "$CL Cloning: aionn Python Library $NC"
 cd $MODULES
-#git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_msgpack_ext
 git clone https://github.com/wschoenell/aionn.git
 echo -e "$CL Building: aionn Python Library $NC"
 pip3 install --no-deps $MODULES/aionn/ --target $GMT_GLOBAL/lib/py/
