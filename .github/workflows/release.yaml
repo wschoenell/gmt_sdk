@@ -15,24 +15,20 @@ jobs:
         run: cp -fr release/* .
       - name: Get release name
         id: release_name
-        uses: actions/github-script@0.2.0
-        with:
-          github-token: ${{ secrets.PAT }}
-          script: |
-            return context.payload.ref.replace(/\/refs\/tags\/v/, '');
+        run: echo "::set-output name=release_id::$(echo $GITHUB_REF | sed 's/\/refs\/tags\/v//')"
       - name: 'GMT SDK distribution'
         id: build_release
         uses: ./
         with:
-          args: /module/create_build.sh ${{ steps.release_name.outputs.result }} # version (for the final release)
+          args: /module/create_build.sh ${{ steps.release_name.outputs.release_id }} # version date-commit
       - name: 'Upload Artifact'
         uses: actions/upload-artifact@v2
         with:
-          name: gmt-sdk-${{ env.version }}.tar.gz
-          path: ${{ github.workspace }}/gmt-sdk-${{ steps.release_name.outputs.result }}.tar.gz
-          retention-days: 180
+          name: gmt-sdk-${{ steps.release_name.outputs.release_id }}.tar.gz
+          path: ${{ github.workspace }}/gmt-sdk-${{ steps.release_name.outputs.release_id }}.tar.gz
+          retention-days: 30
       - name: 'GMT SDK test'
         id: test_release
         uses: ./
         with:
-          args: /module/test_build.sh ${{ steps.release_name.outputs.result }} # version
+          args: /module/test_build.sh ${{ steps.release_name.outputs.release_id }} # version date-commit
