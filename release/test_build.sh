@@ -44,53 +44,55 @@ sed 's/global/local/g;s/sdk/local/g' "$GMT_GLOBAL/etc/bundles/bundles.coffee" > 
 cp "$GMT_GLOBAL/etc/bundles/ocs_local_bundle.coffee" "$GMT_LOCAL/etc/bundles/"
 
 
-# Quick test on the Framework scripts
-fwk_version=$(echo $VERSION | cut -f1-2 -d.)
-echo "Testing alarm_server version"
-v=$(alarm_server --version)
-[[ $v == $fwk_version || $RC != "" ]] || exit 1
-echo "Testing alarm_client version"
-v=$(alarm_client --version)
-[[ $v == $fwk_version || $RC != "" ]] || exit 1
-echo "Testing conf_server version"
-v=$(conf_server --version)
-[[ $v == $fwk_version || $RC != "" ]] || exit 1
-echo "Testing conf_client version"
-v=$(conf_client --version)
-[[ $v == $fwk_version || $RC != "" ]] || exit 1
-echo "Testing data_client version"
-v=$(data_client --version)
-[[ $v == $fwk_version || $RC != "" ]] || exit 1
-echo "Testing data_server version"
-v=$(data_server --version)
-[[ $v == $fwk_version || $RC != "" ]] || exit 1
-echo "Testing log_server version"
-v=$(log_server --version)
-[[ $v == $fwk_version || $RC != "" ]] || exit 1
-echo "Testing log_client version"
-v=$(log_client --version)
-[[ $v == $fwk_version || $RC != "" ]] || exit 1
-echo "Testing sup_server version"
-v=$(sup_server --version)
-[[ $v == $fwk_version || $RC != "" ]] || exit 1
-echo "Testing sup_client version"
-v=$(sup_client --version)
-[[ $v == $fwk_version || $RC != "" ]] || exit 1
-echo "Testing tele_server version"
-v=$(tele_server --version)
-[[ $v == $fwk_version || $RC != "" ]] || exit 1
-echo "Testing tele_client version"
-v=$(tele_client --version)
-[[ $v == $fwk_version || $RC != "" ]] || exit 1
+# Quick test on the Framework scripts - only if not a Release Candidate
+if [[ $RC = "" ]]; then
+    fwk_version=$(echo $VERSION | cut -f1-2 -d.)
+    echo "Testing alarm_server version"
+    v=$(alarm_server --version)
+    [[ $v == $fwk_version ]] || exit 1
+    echo "Testing alarm_client version"
+    v=$(alarm_client --version)
+    [[ $v == $fwk_version ]] || exit 1
+    echo "Testing conf_server version"
+    v=$(conf_server --version)
+    [[ $v == $fwk_version ]] || exit 1
+    echo "Testing conf_client version"
+    v=$(conf_client --version)
+    [[ $v == $fwk_version ]] || exit 1
+    echo "Testing data_client version"
+    v=$(data_client --version)
+    [[ $v == $fwk_version ]] || exit 1
+    echo "Testing data_server version"
+    v=$(data_server --version)
+    [[ $v == $fwk_version ]] || exit 1
+    echo "Testing log_server version"
+    v=$(log_server --version)
+    [[ $v == $fwk_version ]] || exit 1
+    echo "Testing log_client version"
+    v=$(log_client --version)
+    [[ $v == $fwk_version ]] || exit 1
+    echo "Testing sup_server version"
+    v=$(sup_server --version)
+    [[ $v == $fwk_version ]] || exit 1
+    echo "Testing sup_client version"
+    v=$(sup_client --version)
+    [[ $v == $fwk_version ]] || exit 1
+    echo "Testing tele_server version"
+    v=$(tele_server --version)
+    [[ $v == $fwk_version ]] || exit 1
+    echo "Testing tele_client version"
+    v=$(tele_client --version)
+    [[ $v == $fwk_version ]] || exit 1
 
-echo "Testing gds version"
-[[ $(gds --version) == $fwk_version || $RC != "" ]] || exit 1
-echo "Testing grs version"
-[[ $(grs --version) == $fwk_version || $RC != "" ]] || exit 1
-echo "Testing gsq version"
-[[ $(gsq --version) == $fwk_version || $RC != "" ]] || exit 1
-echo "Testing gtr version"
-[[ $(gtr --version) == $fwk_version || $RC != "" ]] || exit 1
+    echo "Testing gds version"
+    [[ $(gds --version) == $fwk_version ]] || exit 1
+    echo "Testing grs version"
+    [[ $(grs --version) == $fwk_version ]] || exit 1
+    echo "Testing gsq version"
+    [[ $(gsq --version) == $fwk_version ]] || exit 1
+    echo "Testing gtr version"
+    [[ $(gtr --version) == $fwk_version ]] || exit 1
+fi
 
 # test gds
 gds init tt123_dcs
