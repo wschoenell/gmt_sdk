@@ -15,7 +15,7 @@ jobs:
         run: cp -fr release/* .
       - name: Get release name
         id: release_name
-        run: echo "::set-output name=release_id::$(echo $GITHUB_REF | sed 's/\/refs\/tags\/v//')"
+        run: echo ::set-output name=release_id::$(echo $GITHUB_REF | sed 's/refs\/tags\/v//')
       - name: 'GMT SDK distribution'
         id: build_release
         uses: ./
