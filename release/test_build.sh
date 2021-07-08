@@ -46,7 +46,7 @@ cp "$GMT_GLOBAL/etc/bundles/ocs_local_bundle.coffee" "$GMT_LOCAL/etc/bundles/"
 
 # Quick test on the Framework scripts - only if not a Release Candidate
 if [[ $RC = "" ]]; then
-    fwk_version=$(echo $VERSION | cut -f1-2 -d.)
+    fwk_version=$VERSION
     echo "Testing alarm_server version"
     v=$(alarm_server --version)
     [[ $v == $fwk_version ]] || exit 1
