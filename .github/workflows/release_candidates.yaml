@@ -6,7 +6,7 @@ jobs:
     name: GMT SDK build
     env:
       PAT: ${{ secrets.PAT }}
-      version: "1.10.1"
+      version: "1.11.0"
       # Add pull request numbers separated by commas (,) below
       ocs_core_fwk_pull_requests: "246,247"
       ocs_dev_fwk_pull_requests: ""
