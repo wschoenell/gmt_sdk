@@ -14,10 +14,10 @@ Running locally (requires docker)
     # Build SDK
     cd release
     docker build -t gmt_sdk .
-    docker run -e PAT -v $PWD/github/workspace/:/github/workspace/ gmt_sdk /module/create_build.sh 1.10.0 $(date "+%Y%m%d")-test
+    docker run -e PAT -v $PWD/github/workspace/:/github/workspace/ gmt_sdk /module/create_build.sh 1.10.1 $(date "+%Y%m%d")-test
     
     # Test SDK
-    docker run -e PAT -v $PWD/github/workspace/:/github/workspace/ gmt_sdk /module/test_build.sh 1.10.0 $(date "+%Y%m%d")-test
+    docker run -e PAT -v $PWD/github/workspace/:/github/workspace/ gmt_sdk /module/test_build.sh 1.10.1 $(date "+%Y%m%d")-test
     
 Deploying on GMT release server
 -------------------------------
@@ -29,11 +29,12 @@ Deploying on GMT release server
 3. Copy release to the admin server 172.16.10.21:
 
 
-    scp gmt-sdk-1.9.0.20210625-eafdfdc.tar.gz root@172.16.10.21:
+    filename="gmt-sdk-1.9.0.20210625-eafdfdc.tar.gz"
+    scp $filename root@172.16.10.21:
 
 2. From root account on the admin server, copy the file to the release server running:
 
 
-    scp gmt-sdk-1.9.0.20210625-eafdfdc.tar.gz fedora@52.52.46.32:/srv/gmt/releases/sdk/linux/
+    ssh root@172.16.10.21 scp $filename fedora@52.52.46.32:/srv/gmt/releases/sdk/linux/
     
     
