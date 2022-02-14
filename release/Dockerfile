@@ -1,3 +1,3 @@
-FROM ghcr.io/wschoenell/gmt-base-os:baseos_dockerfile
+FROM ghcr.io/gmto/gmt-base-os:latest
 
 COPY ./ /module/
