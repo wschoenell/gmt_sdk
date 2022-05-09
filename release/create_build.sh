@@ -283,17 +283,12 @@ cd ocs_msgpack_ext
 
 # compile c++ modules
 echo -e "$CL Compiling C++ Libs: ocs_core_fwk $NC"
-cd $MODULES/ocs_core_fwk/src/cpp && make -j2
+cd $MODULES/ocs_core_fwk/src/cpp && make -j$(nproc --all)
 cd $GMT_LOCAL/include;  g++ -I. -Wall -Wextra -pedantic -std=c++17 -Wno-variadic-macros -I$GMT_LOCAL/ext/include -Wno-class-memaccess -fPIC -c -x c++-header -O2 -o ocs_core_fwk.h.gch ocs_core_fwk.h
 echo -e "$CL Compiling C++ Libs: ocs_io_fwk $NC"
-cd $MODULES/ocs_io_fwk/src/cpp && make -j2
+cd $MODULES/ocs_io_fwk/src/cpp && make -j$(nproc --all)
 echo -e "$CL Compiling C++ Libs: ocs_ctrl_fwk $NC"
-cd $MODULES/ocs_ctrl_fwk/src/cpp && make -j2
-
-# TEMP
-# Copy ethercatgen script into bin folder
-#cp $BASE_DIR/ethercatgen $BUILD_DIR/bin
-# END TEMP
+cd $MODULES/ocs_ctrl_fwk/src/cpp && make -j$(nproc --all)
 
 # Python fwks
 mkdir -p $GMT_GLOBAL/lib/py/

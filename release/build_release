@@ -37,8 +37,6 @@ modules      = [
     "da_sys"
     "app_sys"
     "seq_sys"
-    #"isample_dcs"
-    #"hdk_dcs"
 ]
 
 console.log "[INF] Processing model files"
