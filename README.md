@@ -9,7 +9,7 @@ release.
 Running locally (requires docker)
 ---------------------------------
     # Personal Access Token needed for cloning GMT private repos
-    export PAT="" # put a valid Personal Access Token
+    export PAT="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" # put a valid Personal Access Token
     
     # Build SDK
     cd release
@@ -19,6 +19,19 @@ Running locally (requires docker)
     # Test SDK
     docker run -e PAT -v $PWD/github/workspace/:/github/workspace/ gmt_sdk /module/test_build.sh 1.10.1 $(date "+%Y%m%d")-test
     
+Running over GitHub actions (official release)
+----------------------------------------------
+
+To create an official release, just create a release in the repo following the release normal creation procedure in this repo.
+For documentation on release creation on github repositories, follow this documentation:
+https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository
+
+Running over GitHub actions (release candidates)
+----------------------------------------------
+
+To create a release candidate, update the release candidate action file with the pull requests that has to be included on the RC.
+When the change is pushed, a release candidate is automatically generated. 
+
 Deploying on GMT release server
 -------------------------------
 

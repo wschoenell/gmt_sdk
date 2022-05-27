@@ -346,6 +346,17 @@ cp swc_modeling_guidelines.pdf $DOCS
 cp swc_test_guidelines.pdf $DOCS
 #cp swc_ui_fwk_guidelines.pdf $DOCS
 
+echo -e "$CL Writing in the docs the git hashes used on this release... $NC"
+cd $MODULES
+echo "# List of repositories and git hashes used in this release #" > $DOCS/GIT_MANIFEST.txt
+for repo in *
+do
+  cd $repo
+  echo -n "$repo: "
+  git rev-parse --short HEAD
+  cd ..
+done >> $DOCS/GIT_MANIFEST.txt
+
 # create distribution directory
 echo -e "$CL Creating SDK distribution: $SDK_DIST_DIR $NC"
 cp -r $BUILD_DIR $SDK_DIST_DIR
