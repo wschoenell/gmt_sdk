@@ -9,7 +9,7 @@ release.
 Running locally (requires docker)
 ---------------------------------
     # Personal Access Token needed for cloning GMT private repos
-    export PAT="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" # put a valid Personal Access Token
+    export PAT="" # put a valid Personal Access Token
     
     # Build SDK
     cd release
