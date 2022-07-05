@@ -99,6 +99,7 @@ gds init tt123_dcs
 gds env
 
 # Clone core frameworks
+cd $HOME
 git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_core_fwk
 # Checkout pull requests
 cd ocs_core_fwk
