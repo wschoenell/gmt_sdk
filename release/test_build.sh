@@ -98,6 +98,22 @@ fi
 gds init tt123_dcs
 gds env
 
+# Clone core frameworks
+git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_core_fwk
+# Checkout pull requests
+cd ocs_core_fwk
+for id in $(echo $ocs_core_fwk_pull_requests | sed 's/,/\n/g')
+do
+    echo -e "$CL Checking pull request #$id $NC"
+    git pull --no-edit origin pull/$id/head
+done
+cd ..
+
+# TODO
+# C++ release test
+# TODO end
+
+
 # Python release test
 # Python release install
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O $HOME/miniconda.sh
@@ -109,16 +125,6 @@ pip install cson
 
 # Run Python tests
 cd $HOME
-
-git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_core_fwk
-# Checkout pull requests
-cd ocs_core_fwk
-for id in $(echo $ocs_core_fwk_pull_requests | sed 's/,/\n/g')
-do
-    echo -e "$CL Checking pull request #$id $NC"
-    git pull --no-edit origin pull/$id/head
-done
-cd ..
 
 # add nanocat path to the PATH env var
 export PATH=$PATH:$GMT_GLOBAL/ext/bin/
