@@ -50,7 +50,7 @@ cd $MODULES
 
 
 echo -e "$CL Cloning: ocs_dev_fwk $NC"
-git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_dev_fwk
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_dev_fwk
 # Checkout pull requests
 cd ocs_dev_fwk
 for id in $(echo $ocs_dev_fwk_pull_requests | sed 's/,/\n/g')
@@ -72,11 +72,11 @@ make install
 # clone all SDK modules
 echo -e "$CL Cloning: ocs_sys $NC"
 cd $MODULES
-git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_sys
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_sys
 
 echo -e "$CL Cloning core frameworks $NC"
 cd $MODULES
-git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_core_fwk
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_core_fwk
 # Checkout pull requests
 cd ocs_core_fwk
 for id in $(echo $ocs_core_fwk_pull_requests | sed 's/,/\n/g')
@@ -86,7 +86,7 @@ do
 done
 cd ..
 
-git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_ctrl_fwk
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_ctrl_fwk
 # Checkout pull requests
 cd ocs_ctrl_fwk
 for id in $(echo $ocs_ctrl_fwk_pull_requests | sed 's/,/\n/g')
@@ -96,7 +96,7 @@ do
 done
 cd ..
 
-git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_dp_fwk
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_dp_fwk
 # Checkout pull requests
 cd ocs_dp_fwk
 for id in $(echo $ocs_dp_fwk_pull_requests | sed 's/,/\n/g')
@@ -107,7 +107,7 @@ done
 cd ..
 
 
-git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_io_fwk
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_io_fwk
 # Checkout pull requests
 cd ocs_io_fwk
 for id in $(echo $ocs_io_fwk_pull_requests | sed 's/,/\n/g')
@@ -117,7 +117,7 @@ do
 done
 cd ..
 
-git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_pers_fwk
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_pers_fwk
 # Checkout pull requests
 cd ocs_pers_fwk
 for id in $(echo $ocs_pers_fwk_pull_requests | sed 's/,/\n/g')
@@ -127,7 +127,7 @@ do
 done
 cd ..
 
-git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_test_fwk
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_test_fwk
 # Checkout pull requests
 cd ocs_test_fwk
 for id in $(echo $ocs_test_fwk_pull_requests | sed 's/,/\n/g')
@@ -137,7 +137,7 @@ do
 done
 cd ..
 
-#git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_ui_fwk
+#git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_ui_fwk
 ## Checkout pull requests
 #cd ocs_ui_fwk
 #for id in $(echo $ocs_ui_fwk_pull_requests | sed 's/,/\n/g')
@@ -150,7 +150,7 @@ cd ..
 
 echo -e "$CL Cloning core services $NC"
 cd $MODULES
-git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_log_sys
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_log_sys
 # Checkout pull requests
 cd ocs_log_sys
 for id in $(echo $ocs_log_sys_pull_requests | sed 's/,/\n/g')
@@ -160,7 +160,7 @@ do
 done
 cd ..
 
-git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_alarm_sys
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_alarm_sys
 # Checkout pull requests
 cd ocs_alarm_sys
 for id in $(echo $ocs_alarm_sys_pull_requests | sed 's/,/\n/g')
@@ -170,7 +170,7 @@ do
 done
 cd ..
 
-git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_tele_sys
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_tele_sys
 # Checkout pull requests
 cd ocs_tele_sys
 for id in $(echo $ocs_tele_sys_pull_requests | sed 's/,/\n/g')
@@ -180,7 +180,7 @@ do
 done
 cd ..
 
-git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_conf_sys
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_conf_sys
 # Checkout pull requests
 cd ocs_conf_sys
 for id in $(echo $ocs_conf_sys_pull_requests | sed 's/,/\n/g')
@@ -190,7 +190,7 @@ do
 done
 cd ..
 
-git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_sup_sys
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_sup_sys
 # Checkout pull requests
 cd ocs_sup_sys
 for id in $(echo $ocs_sup_sys_pull_requests | sed 's/,/\n/g')
@@ -200,7 +200,7 @@ do
 done
 cd ..
 
-git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_da_sys
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_da_sys
 # Checkout pull requests
 cd ocs_da_sys
 for id in $(echo $ocs_da_sys_pull_requests | sed 's/,/\n/g')
@@ -210,7 +210,7 @@ do
 done
 cd ..
 
-git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_app_sys
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_app_sys
 # Checkout pull requests
 cd ocs_app_sys
 for id in $(echo $ocs_app_sys_pull_requests | sed 's/,/\n/g')
@@ -220,7 +220,7 @@ do
 done
 cd ..
 
-git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_seq_sys
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_seq_sys
 # Checkout pull requests
 cd ocs_seq_sys
 for id in $(echo $ocs_seq_sys_pull_requests | sed 's/,/\n/g')
@@ -248,9 +248,43 @@ cp -fr $MODULES/ocs_core_fwk/src/py/ $BASE_DIR/lib/
 #echo -e "$CL Node UI Fwk build DONE $NC"
 
 ## Checkout and build nanomsg for C++
+echo -e "$CL Cloning: ocs_boost_ext $NC"
+cd $MODULES
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_boost_ext
+# Checkout pull requests
+cd ocs_boost_ext
+for id in $(echo $ocs_boost_ext_pull_requests | sed 's/,/\n/g')
+do
+    echo -e "$CL Checking pull request #$id $NC"
+    git pull --no-edit origin pull/$id/head
+done
+cd ..
+
+echo -e "$CL Building: ocs_boost_ext $NC"
+cd ocs_boost_ext
+./gmt_install_ext.sh
+
+## Checkout and build nanomsg for C++
+echo -e "$CL Cloning: ocs_eigen_ext $NC"
+cd $MODULES
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_eigen_ext
+# Checkout pull requests
+cd ocs_eigen_ext
+for id in $(echo $ocs_eigen_ext_pull_requests | sed 's/,/\n/g')
+do
+    echo -e "$CL Checking pull request #$id $NC"
+    git pull --no-edit origin pull/$id/head
+done
+cd ..
+
+echo -e "$CL Building: ocs_eigen_ext $NC"
+cd ocs_eigen_ext
+./gmt_install_ext.sh
+
+## Checkout and build nanomsg for C++
 echo -e "$CL Cloning: ocs_nanomsg_ext $NC"
 cd $MODULES
-git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_nanomsg_ext
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_nanomsg_ext
 # Checkout pull requests
 cd ocs_nanomsg_ext
 for id in $(echo $ocs_nanomsg_ext_pull_requests | sed 's/,/\n/g')
@@ -267,7 +301,7 @@ cd ocs_nanomsg_ext
 ## Checkout and build msgpack for C++
 echo -e "$CL Cloning: ocs_msgpack_ext $NC"
 cd $MODULES
-git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_msgpack_ext
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_msgpack_ext
 # Checkout pull requests
 cd ocs_msgpack_ext
 for id in $(echo $ocs_msgpack_ext_pull_requests | sed 's/,/\n/g')
@@ -296,7 +330,7 @@ export PYTHONPATH=$PYTHONPATH:$GMT_GLOBAL/lib/py/
 
 echo -e "$CL Cloning: nnpy Python Library $NC"
 cd $MODULES
-git clone https://github.com/wschoenell/nnpy.git
+git clone --recursive https://github.com/wschoenell/nnpy.git
 echo -e "$CL Building: nnpy Python Library $NC"
 cd nnpy
 dnf install -y python3-devel redhat-rpm-config
@@ -305,7 +339,7 @@ pip3 install . --target $GMT_GLOBAL/lib/py/
 
 echo -e "$CL Cloning: aionn Python Library $NC"
 cd $MODULES
-git clone https://github.com/wschoenell/aionn.git
+git clone --recursive https://github.com/wschoenell/aionn.git
 echo -e "$CL Building: aionn Python Library $NC"
 pip3 install --no-deps $MODULES/aionn/ --target $GMT_GLOBAL/lib/py/
 
@@ -323,7 +357,7 @@ mkdir $BUILD_DIR/doc
 DOCS=$GMT_LOCAL/doc
 cd $MODULES
 echo -e "$CL Cloning: gmt_docs $NC"
-git clone --single-branch -b gh-pages https://$PAT:x-oauth-basic@github.com/GMTO/gmt_docs
+git clone --recursive --single-branch -b gh-pages https://$PAT:x-oauth-basic@github.com/GMTO/gmt_docs
 # Checkout pull requests
 cd gmt_docs
 for id in $(echo $gmt_docs_pull_requests | sed 's/,/\n/g')
