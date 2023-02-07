@@ -11,6 +11,7 @@ SDK_DIST_DIR="$BASE_DIR/gmt_dist"
 # git configuration to checkout pull requests
 git config --global user.email "you@example.com"
 git config --global user.name "Your Name"
+git config --global submodule.fetchJobs $(nproc --all)  # The number of submodules fetched at the same time
 
 if [[ $RC == "" ]] ; then
   SDK_TAR_FILE="$BASE_DIR/gmt-sdk-$VERSION.tar.gz"
