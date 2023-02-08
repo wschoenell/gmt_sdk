@@ -15,7 +15,7 @@ Running locally (requires docker)
     cd release
     docker build -t gmt_sdk .
     eval $(egrep '(_pull_requests|_pull_requests)' ../.github/workflows/release_candidates.yaml | grep -v '^#' | sed 's/^/export/;s/: /=/g;')
-    docker run -e PAT -e ocs_core_fwk_pull_requests -e ocs_io_fwk_pull_requests -e ocs_eigen_ext_pull_requests \
+    docker run -e PAT -e ocs_dev_fwk_pull_requests -e ocs_core_fwk_pull_requests -e ocs_io_fwk_pull_requests -e ocs_eigen_ext_pull_requests \
      -v $PWD/github/workspace/:/github/workspace/ gmt_sdk /module/create_build.sh 1.10.1 $(date "+%Y%m%d")-test
     
     # Test SDK

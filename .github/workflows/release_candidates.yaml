@@ -9,7 +9,7 @@ jobs:
       version: "1.12.0"
       # Add pull request numbers separated by commas (,) below
       ocs_core_fwk_pull_requests: "268,271"
-      ocs_dev_fwk_pull_requests: "121"
+      ocs_dev_fwk_pull_requests: "121,122"
       ocs_sys_pull_requests: ""
       ocs_ctrl_fwk_pull_requests: "14"
       ocs_dp_fwk_pull_requests: ""
