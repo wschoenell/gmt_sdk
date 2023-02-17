@@ -110,10 +110,29 @@ do
 done
 cd ..
 
-# TODO
 # C++ release test
-# TODO end
-
+echo -e "$CL Installing and running C++ test dependencies $NC"
+# MONGODB
+printf '[mongodb-org-4]\nname=MongoDB Repository\nbaseurl=https://repo.mongodb.org/yum/redhat/7/mongodb-org/4.2/x86_64/\ngpgcheck=1\nenabled=1\ngpgkey=https://www.mongodb.org/static/pgp/server-4.2.asc'> /etc/yum.repos.d/mongodb-org-4.repo
+dnf -y install mongodb-org && dnf clean all
+sed -i 's/.*dbPath:.*/  dbPath: \/data\/mongo\//g' /etc/mongod.conf
+mv /var/lib/mongo/ /data/
+mkdir -p /data/db
+mongod > /dev/null &
+sleep 10
+# Services
+log_server&
+tele_server&
+echo "=="
+cd $GMT_GLOBAL/test/ocs_core_fwk/bin/
+for i in *
+do
+  # Skip some tests. See GMTO/gmt_issues#244, GMTO/gmt_issues#243, GMTO/gmt_issues#242, GMTO/gmt_issues#241
+  if [ "$i" != "core_lib_pkg_functional_03_periodictask_test" ] && [ "$i" != "core_lib_pkg_functional_12_faultree_test" ] && [ "$i" != "core_lib_pkg_functional_13_alarmtree_test" ] && [ "$i" != "core_lib_pkg_functional_14_compproxy_test" ] && [ "$i" != "core_lib_pkg_functional_18_serverproxy_test" ]; then
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GMT_GLOBAL/test/ocs_core_fwk/lib/so ./$i
+  fi
+done
+cd $HOME
 
 # Python release test
 # Python release install
@@ -123,6 +142,9 @@ conda create -y -n gmt conda-build msgpack-python=0.6.1 #numpy
 conda activate gmt
 conda develop "$GMT_GLOBAL/lib/py/"
 pip install cson
+
+# Install ASCII tree (optional for python test tree representations)
+pip install https://github.com/spandanb/asciitree/archive/refs/heads/master.zip
 
 # Run Python tests
 cd $HOME

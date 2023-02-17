@@ -1,11 +1,10 @@
 #!/usr/bin/bash
-# Script to semi-automate the integration and build process
 set -e
 
 VERSION=$1
 RC=$2
-BASE_DIR=/module/
-BUILD_DIR="$BASE_DIR/gmt_build"
+BASE_DIR=/module
+SDK_BUILD_DIR="$BASE_DIR/gmt_build"
 SDK_DIST_DIR="$BASE_DIR/gmt_dist"
 
 # git configuration to checkout pull requests
@@ -30,20 +29,20 @@ if [ -f $SDK_TAR_FILE ] ; then
 	rm -f $SDK_TAR_FILE
 fi
 
-if [ -d $BUILD_DIR ] ; then
-	echo -e "$CL Removing old build directory: $BUILD_DIR $NC"
-	rm -rf $BUILD_DIR
+if [ -d $SDK_BUILD_DIR ] ; then
+	echo -e "$CL Removing old build directory: $SDK_BUILD_DIR $NC"
+	rm -rf $SDK_BUILD_DIR
 fi
 echo -e "$CL Removing old SDK distribution directory: $SDK_DIST_DIR $NC"
 rm -rf $SDK_DIST_DIR
 
 # Create new build directory
-echo -e "$CL Creating new build directory: $BUILD_DIR $NC"
-mkdir $BUILD_DIR
+echo -e "$CL Creating new build directory: $SDK_BUILD_DIR $NC"
+mkdir $SDK_BUILD_DIR
 
 # Set environment variables
-export GMT_GLOBAL=$BUILD_DIR
-export GMT_LOCAL=$BUILD_DIR
+export GMT_GLOBAL=$SDK_BUILD_DIR
+export GMT_LOCAL=$SDK_BUILD_DIR
 
 # Checkout and build ocs_dev_fwk
 MODULES=$GMT_LOCAL/modules
@@ -326,6 +325,11 @@ cd $MODULES/ocs_io_fwk/src/cpp && make -j$(nproc --all)
 echo -e "$CL Compiling C++ Libs: ocs_ctrl_fwk $NC"
 cd $MODULES/ocs_ctrl_fwk/src/cpp && make -j$(nproc --all)
 
+# compile c++ tests
+echo -e "$CL Compiling C++ Tests: ocs_core_fwk $NC"
+cd $MODULES/ocs_core_fwk/test/cpp && make -j$(nproc --all)
+ls $GMT_LOCAL
+
 # Python fwks
 mkdir -p $GMT_GLOBAL/lib/py/
 export PYTHONPATH=$PYTHONPATH:$GMT_GLOBAL/lib/py/
@@ -353,7 +357,7 @@ cp -fr $MODULES/ocs_core_fwk/src/py/gmt/ $GMT_GLOBAL/lib/py/gmt/
 
 # create docs directory
 echo -e "$CL Creating doc/ folder $NC"
-mkdir $BUILD_DIR/doc
+mkdir $SDK_BUILD_DIR/doc
 
 # copy PDFs from gmt_docs repo
 DOCS=$GMT_LOCAL/doc
@@ -395,12 +399,11 @@ done >> $DOCS/GIT_MANIFEST.txt
 
 # create distribution directory
 echo -e "$CL Creating SDK distribution: $SDK_DIST_DIR $NC"
-cp -r $BUILD_DIR $SDK_DIST_DIR
+cp -r $SDK_BUILD_DIR $SDK_DIST_DIR
 chown -R root:root $SDK_DIST_DIR
 echo -e "$CL Cleaning up SDK distribution: $SDK_DIST_DIR $NC"
 rm -rf $SDK_DIST_DIR/modules
 rm -rf $SDK_DIST_DIR/node_modules
-rm -rf $SDK_DIST_DIR/test
 rm -rf $SDK_DIST_DIR/examples
 rm -rf $SDK_DIST_DIR/modules
 rm -rf $SDK_DIST_DIR/node_modules
