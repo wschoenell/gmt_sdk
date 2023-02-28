@@ -19,24 +19,27 @@ copy_file_set = (source_dir, dest_dir, pattern) =>
                     shell.mkdir "-p", dest_dir
                 shell.cp file_name, dest_dir
 
-global_scope = process.env['GMT_GLOBAL']
-local_scope  = process.env['GMT_LOCAL']
-modules      = [
+global_scope  = process.env['GMT_GLOBAL']
+local_scope   = process.env['GMT_LOCAL']
+modules       = [
     "sys"
     "core_fwk"
     "ctrl_fwk"
     "dp_fwk"
     "io_fwk"
     "pers_fwk"
-    "test_fwk"
+#    "test_fwk"
+    "ui_fwk"
     "log_sys"
     "alarm_sys"
     "tele_sys"
     "conf_sys"
     "sup_sys"
     "da_sys"
-    "app_sys"
     "seq_sys"
+    "app_sys"
+    #"isample_dcs"
+    #"hdk_dcs"
 ]
 
 console.log "[INF] Processing model files"
@@ -48,7 +51,9 @@ spawnSync "make build",      {shell: true, stdio: 'inherit', cwd: "#{global_scop
 spawnSync "make build",      {shell: true, stdio: 'inherit', cwd: "#{global_scope}/modules/ocs_core_fwk/src/coffee"}
 spawnSync "make build",      {shell: true, stdio: 'inherit', cwd: "#{global_scope}/modules/ocs_ctrl_fwk/src/coffee"}
 spawnSync "make build",      {shell: true, stdio: 'inherit', cwd: "#{global_scope}/modules/ocs_pers_fwk/src/coffee"}
-spawnSync "make build",      {shell: true, stdio: 'inherit', cwd: "#{global_scope}/modules/ocs_test_fwk/src/coffee"}
+#spawnSync "make build",      {shell: true, stdio: 'inherit', cwd: "#{global_scope}/modules/ocs_test_fwk/src/coffee"}
+spawnSync "make build",      {shell: true, stdio: 'inherit', cwd: "#{global_scope}/modules/ocs_ui_fwk/src/coffee"}
+#spawnSync "make build",      {shell: true, stdio: 'inherit', cwd: "#{global_scope}/modules/ocs_dp_fwk/src/coffee"}
 spawnSync "make build_core", {shell: true, stdio: 'inherit', cwd: "#{global_scope}/modules/ocs_app_sys/src/coffee"}
 spawnSync "make build",      {shell: true, stdio: 'inherit', cwd: "#{global_scope}/modules/ocs_log_sys/src/coffee"}
 spawnSync "make build",      {shell: true, stdio: 'inherit', cwd: "#{global_scope}/modules/ocs_tele_sys/src/coffee"}
@@ -56,10 +61,12 @@ spawnSync "make build",      {shell: true, stdio: 'inherit', cwd: "#{global_scop
 spawnSync "make build",      {shell: true, stdio: 'inherit', cwd: "#{global_scope}/modules/ocs_sup_sys/src/coffee"}
 spawnSync "make build",      {shell: true, stdio: 'inherit', cwd: "#{global_scope}/modules/ocs_conf_sys/src/coffee"}
 spawnSync "make build",      {shell: true, stdio: 'inherit', cwd: "#{global_scope}/modules/ocs_da_sys/src/coffee"}
-spawnSync "make build_srv",  {shell: true, stdio: 'inherit', cwd: "#{global_scope}/modules/ocs_app_sys/src/coffee"}
+#spawnSync "make build",      {shell: true, stdio: 'inherit', cwd: "#{global_scope}/modules/ocs_dp_sys/src/coffee"}
 spawnSync "make build",      {shell: true, stdio: 'inherit', cwd: "#{global_scope}/modules/ocs_seq_sys/src/coffee"}
+spawnSync "make build_srv",  {shell: true, stdio: 'inherit', cwd: "#{global_scope}/modules/ocs_app_sys/src/coffee"}
 #spawnSync "make build",      {shell: true, stdio: 'inherit', cwd: "#{local_scope}/modules/ocs_isample_dcs/src/coffee"}
 #spawnSync "make build",      {shell: true, stdio: 'inherit', cwd: "#{local_scope}/modules/ocs_hdk_dcs/src/coffee"}
+
 
 console.log "[INF] Installing binary files"
 modules
