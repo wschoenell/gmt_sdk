@@ -11,7 +11,7 @@ jobs:
       ocs_core_fwk_pull_requests: "268,271,272,273"
       ocs_dev_fwk_pull_requests: "121,122"
       ocs_sys_pull_requests: ""
-      ocs_ctrl_fwk_pull_requests: "14"
+      ocs_ctrl_fwk_pull_requests: "14,17"
       ocs_dp_fwk_pull_requests: ""
       ocs_io_fwk_pull_requests: ""
       ocs_pers_fwk_pull_requests: "24"
