@@ -231,6 +231,16 @@ do
 done
 cd ..
 
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_ui_fwk
+# Checkout pull requests
+cd ocs_ui_fwk
+for id in $(echo $ocs_ui_fwk_pull_requests | sed 's/,/\n/g')
+do
+    echo -e "$CL Checking pull request #$id $NC"
+    git pull --no-edit origin pull/$id/head
+done
+cd ..
+
 # use build script to compile Node.js code for the SDK
 echo -e "$CL Building Node version of the core frameworks and services $NC"
 cd $BASE_DIR
