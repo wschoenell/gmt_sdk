@@ -81,11 +81,12 @@ modules.forEach (m) =>
 
 console.log "[INF] Compiling configuration files"
 modules.forEach (m) =>
-    raw_files = shell.ls "#{global_scope}/etc/conf/#{m}/*.coffee"
-    if raw_files.length > 0
-        raw_files.forEach (raw_file_path) ->
-            console.log "[INF] Compiling ", raw_file_path
-            encoded_file_path = raw_file_path.replace ".coffee", ".cfg"
-            raw_content       = require raw_file_path
-            encoded_content   = msgpack.encode raw_content
-            fs.writeFileSync encoded_file_path, encoded_content
+    if m isnt "ui_fwk"
+        raw_files = shell.ls "#{global_scope}/etc/conf/#{m}/*.coffee"
+        if raw_files.length > 0
+            raw_files.forEach (raw_file_path) ->
+                console.log "[INF] Compiling ", raw_file_path
+                encoded_file_path = raw_file_path.replace ".coffee", ".cfg"
+                raw_content       = require raw_file_path
+                encoded_content   = msgpack.encode raw_content
+                fs.writeFileSync encoded_file_path, encoded_content
