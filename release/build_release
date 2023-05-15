@@ -82,6 +82,7 @@ modules.forEach (m) =>
 console.log "[INF] Compiling configuration files"
 modules.forEach (m) =>
     if m isnt "ui_fwk"
+        console.log "[INF] Compiling #{m} configuration files"
         raw_files = shell.ls "#{global_scope}/etc/conf/#{m}/*.coffee"
         if raw_files.length > 0
             raw_files.forEach (raw_file_path) ->

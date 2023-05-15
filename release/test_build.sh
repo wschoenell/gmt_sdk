@@ -1,50 +1,14 @@
 #!/usr/bin/env bash
 set -xe
 
-# Unpack release
+# Install the release
 VERSION=$1
 RC=$2
-if [[ $RC == "" ]] ; then
-  SDK_TAR_FILE="gmt-sdk-$VERSION.tar.gz"
-else
-  SDK_TAR_FILE="gmt-sdk-$VERSION.$RC.tar.gz"
-fi
 
-# git configuration to checkout pull requests
-git config --global user.email "you@example.com"
-git config --global user.name "Your Name"
-
-
-# Uncompress SDK
-source /root/.bashrc
-cd $GMT_GLOBAL
-tar zxvf /github/workspace/$SDK_TAR_FILE
-
-# update env
-source /root/.bashrc
-gmt_env
-
-# Install dependencies
-cd "$GMT_GLOBAL"
-npm install
-cp "$GMT_GLOBAL/package.json" "$GMT_LOCAL"
-cd "$GMT_LOCAL"
-npm install
-
-
-# test gds info
-gds info
-
-# gds init
-gds init
-
-## Ensure that the bundles.coffee and ocs_local_bundle.coffee files exist, copying them from $GMT_GLOBAL if need be.
-mkdir -p "$GMT_LOCAL/etc/bundles"
-sed 's/global/local/g;s/sdk/local/g' "$GMT_GLOBAL/etc/bundles/bundles.coffee" > "$GMT_LOCAL/etc/bundles/bundles.coffee"
-cp "$GMT_GLOBAL/etc/bundles/ocs_local_bundle.coffee" "$GMT_LOCAL/etc/bundles/"
-
+bash /module/install_release.sh $VERSION $RC
 
 # Quick test on the Framework scripts - only if not a Release Candidate
+source /root/.bashrc
 if [[ $RC = "" ]]; then
     fwk_version=$VERSION
     echo "Testing alarm_server version"
@@ -98,8 +62,14 @@ fi
 gds init tt123_dcs
 gds env
 
+# test services
+#cs start
+#cs status
+#grs get sup_server -f faults | grep "'ACTIVE'"
+
 # Clone core frameworks
 cd $HOME
+echo -e "$CL Cloning core frameworks $NC"
 git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_core_fwk
 # Checkout pull requests
 cd ocs_core_fwk
@@ -123,12 +93,13 @@ sleep 10
 # Services
 log_server&
 tele_server&
+tele_query_server&
 echo "=="
 cd $GMT_GLOBAL/test/ocs_core_fwk/bin/
 for i in *
 do
   # Skip some tests. See GMTO/gmt_issues#244, GMTO/gmt_issues#243, GMTO/gmt_issues#242, GMTO/gmt_issues#241
-  if [ "$i" != "core_lib_pkg_functional_03_periodictask_test" ] && [ "$i" != "core_lib_pkg_functional_12_faultree_test" ] && [ "$i" != "core_lib_pkg_functional_13_alarmtree_test" ] && [ "$i" != "core_lib_pkg_functional_14_compproxy_test" ] && [ "$i" != "core_lib_pkg_functional_18_serverproxy_test" ]; then
+  if [ "$i" != "core_lib_pkg_functional_03_periodictask_test" ] && [ "$i" != "core_lib_pkg_functional_18_serverproxy_test" ]; then
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$GMT_GLOBAL/test/ocs_core_fwk/lib/so ./$i
   fi
 done
@@ -158,5 +129,21 @@ do
   python $i
   sleep 0.2
 done
+
+# test isample
+# Clone isample
+cd $HOME
+echo -e "$CL Cloning ocs_isample_dcs $NC"
+git clone https://$PAT:x-oauth-basic@github.com/GMTO/ocs_isample_dcs
+# Checkout pull requests
+cd ocs_isample_dcs
+for id in $(echo $ocs_isample_dcs_pull_requests | sed 's/,/\n/g')
+do
+    echo -e "$CL Checking pull request #$id $NC"
+    git pull --no-edit origin pull/$id/head
+done
+cd ..
+
+
 
 echo "Finished GMT SDK tests."
