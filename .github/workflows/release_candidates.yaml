@@ -8,7 +8,7 @@ jobs:
       PAT: ${{ secrets.PAT }}
       version: "1.14.0"
       # Add pull request numbers separated by commas (,) below
-      ocs_core_fwk_pull_requests: "277,281"
+      ocs_core_fwk_pull_requests: ""
       ocs_dev_fwk_pull_requests: ""
       ocs_sys_pull_requests: ""
       ocs_ctrl_fwk_pull_requests: ""
