@@ -43,7 +43,7 @@ jobs:
         run: cp -fr release/* .
       - name: Get release name
         id: release_name
-        run: echo "name=release_id::$(date +'%Y%m%d')-${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+        run: echo "release_id=$(date +'%Y%m%d')-${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
       - name: 'GMT SDK distribution'
         id: build_release
         uses: ./
