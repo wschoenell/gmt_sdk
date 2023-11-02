@@ -9,8 +9,6 @@ SDK_DIST_DIR="$BASE_DIR/gmt_dist"
 
 echo "Starting build for version: $VERSION and RC: $RC"
 
-exit 0
-
 # Number of processes to use for git and compilation
 NPROC=$(nproc --all)
 
