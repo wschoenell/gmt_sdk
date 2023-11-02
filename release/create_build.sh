@@ -7,10 +7,13 @@ BASE_DIR=/module
 SDK_BUILD_DIR="$BASE_DIR/gmt_build"
 SDK_DIST_DIR="$BASE_DIR/gmt_dist"
 
+# Number of processes to use for git and compilation
+NPROC=$(nproc --all)
+
 # git configuration to checkout pull requests
 git config --global user.email "you@example.com"
 git config --global user.name "Your Name"
-git config --global submodule.fetchJobs $(nproc --all)  # The number of submodules fetched at the same time
+git config --global submodule.fetchJobs $NPROC  # The number of submodules fetched at the same time
 git config --global pull.rebase false
 
 if [[ $RC == "" ]] ; then
@@ -201,10 +204,10 @@ do
 done
 cd ..
 
-git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_da_sys
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_data_sys
 # Checkout pull requests
-cd ocs_da_sys
-for id in $(echo $ocs_da_sys_pull_requests | sed 's/,/\n/g')
+cd ocs_data_sys
+for id in $(echo $ocs_data_sys_pull_requests | sed 's/,/\n/g')
 do
     echo -e "$CL Checking pull request #$id $NC"
     git pull --no-edit origin pull/$id/head
@@ -244,7 +247,8 @@ cd ..
 # use build script to compile Node.js code for the SDK
 echo -e "$CL Building Node version of the core frameworks and services $NC"
 cd $BASE_DIR
-./build_release
+chmod 755 $SDK_BUILD_DIR/modules/ocs_dev_fwk/src/bin/build_release
+$SDK_BUILD_DIR/modules/ocs_dev_fwk/src/bin/build_release
 echo -e "$CL Node Core Fwk build DONE $NC"
 
 # Install Python fwks
@@ -258,7 +262,7 @@ cp -fr $MODULES/ocs_core_fwk/src/py/ $BASE_DIR/lib/
 #coffee build_ui_fwk.coffee
 #echo -e "$CL Node UI Fwk build DONE $NC"
 
-## Checkout and build nanomsg for C++
+## Checkout and build BOOST for C++
 echo -e "$CL Cloning: ocs_boost_ext $NC"
 cd $MODULES
 git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_boost_ext
@@ -273,6 +277,23 @@ cd ..
 
 echo -e "$CL Building: ocs_boost_ext $NC"
 cd ocs_boost_ext
+./gmt_install_ext.sh
+
+## Checkout and build SLALIB for C++
+echo -e "$CL Cloning: ocs_slalib_ext $NC"
+cd $MODULES
+git clone --recursive https://$PAT:x-oauth-basic@github.com/GMTO/ocs_slalib_ext
+# Checkout pull requests
+cd ocs_slalib_ext
+for id in $(echo $ocs_slalib_ext_pull_requests | sed 's/,/\n/g')
+do
+    echo -e "$CL Checking pull request #$id $NC"
+    git pull --no-edit origin pull/$id/head
+done
+cd ..
+
+echo -e "$CL Building: ocs_slalib_ext $NC"
+cd ocs_slalib_ext
 ./gmt_install_ext.sh
 
 ## Checkout and build nanomsg for C++
@@ -328,16 +349,16 @@ cd ocs_msgpack_ext
 
 # compile c++ modules
 echo -e "$CL Compiling C++ Libs: ocs_core_fwk $NC"
-cd $MODULES/ocs_core_fwk/src/cpp && make -j$(nproc --all)
+cd $MODULES/ocs_core_fwk/src/cpp && make -j$NPROC
 cd $GMT_LOCAL/include;  g++ -I. -Wall -Wextra -pedantic -std=c++17 -Wno-variadic-macros -I$GMT_LOCAL/ext/include -Wno-class-memaccess -fPIC -c -x c++-header -O2 -o ocs_core_fwk.h.gch ocs_core_fwk.h
 echo -e "$CL Compiling C++ Libs: ocs_io_fwk $NC"
-cd $MODULES/ocs_io_fwk/src/cpp && make -j$(nproc --all)
+cd $MODULES/ocs_io_fwk/src/cpp && make -j$NPROC
 echo -e "$CL Compiling C++ Libs: ocs_ctrl_fwk $NC"
-cd $MODULES/ocs_ctrl_fwk/src/cpp && make -j$(nproc --all)
+cd $MODULES/ocs_ctrl_fwk/src/cpp && make -j$NPROC
 
 # compile c++ tests
 echo -e "$CL Compiling C++ Tests: ocs_core_fwk $NC"
-cd $MODULES/ocs_core_fwk/test/cpp && make -j$(nproc --all)
+cd $MODULES/ocs_core_fwk/test/cpp && make -j$NPROC
 ls $GMT_LOCAL
 
 # Python fwks

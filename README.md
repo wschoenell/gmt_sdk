@@ -3,7 +3,7 @@ Configuring forks
 
 To run actions on fork, a [Personal Access Token](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token) 
 must be created with `repo` permissions. This token should be added as an [Encrypted secret](https://docs.github.com/en/actions/reference/encrypted-secrets)
-named `PAT` in the forked repository. This secret is used to clone all the repositories needed to generating the 
+named `PAT` in the forked repository. This secret is used to clone all the repositories needed to generate the 
 release.  
 
 Running locally (requires docker)
@@ -14,46 +14,31 @@ Running locally (requires docker)
     # Build SDK
     cd release
     docker build -t gmt_sdk .
-    eval $(egrep '(_pull_requests|_pull_requests)' ../.github/workflows/release_candidates.yaml | grep -v '^#' | sed 's/^/export/;s/: /=/g;')
+    eval $(grep '_pull_requests' ../.github/workflows/release_candidates.yaml | grep -v '^#' | sed 's/^/export/;s/: /=/g;')
     
     # Automated build:
     time docker run -e PAT \
-                -e ocs_core_fwk_pull_requests \
-                -e ocs_dev_fwk_pull_requests \
-                -e ocs_sys_pull_requests \
-                -e ocs_ctrl_fwk_pull_requests \
-                -e ocs_dp_fwk_pull_requests \
-                -e ocs_io_fwk_pull_requests \
-                -e ocs_pers_fwk_pull_requests \
-                -e ocs_test_fwk_pull_requests \
-                -e ocs_ui_fwk_pull_requests \
-                -e ocs_log_sys_pull_requests \
-                -e ocs_alarm_sys_pull_requests \
-                -e ocs_tele_sys_pull_requests \
-                -e ocs_conf_sys_pull_requests \
-                -e ocs_sup_sys_pull_requests \
-                -e ocs_da_sys_pull_requests \
-                -e ocs_app_sys_pull_requests \
-                -e ocs_seq_sys_pull_requests \
-                -e ocs_boost_ext_pull_requests \
-                -e ocs_eigen_ext_pull_requests \
-                -e ocs_nanomsg_ext_pull_requests \
-                -e ocs_msgpack_ext_pull_requests \
+                $(egrep '_pull_requests' ../.github/workflows/release_candidates.yaml | cut -f1 -d: | sed 's/^/-e/g') \
                 -v $PWD/github/workspace/:/github/workspace/ \
                 --cpuset-cpus="0-$(($(nproc)-1))" \
                 gmt_sdk \
-                /module/create_build.sh 1.10.1 $(date "+%Y%m%d")-test
+                /module/create_build.sh 1.14.0 $(date "+%Y%m%d")-test
 
     # Interactively build:
-    docker run -e PAT -e ocs_dev_fwk_pull_requests -e ocs_core_fwk_pull_requests -e ocs_io_fwk_pull_requests -e ocs_eigen_ext_pull_requests \
-     -v $PWD/github/workspace/:/github/workspace/ -it gmt_sdk  
+    docker run -e PAT \
+                $(egrep '_pull_requests' ../.github/workflows/release_candidates.yaml | cut -f1 -d: | sed 's/^/-e/g') \
+                -v $PWD/github/workspace/:/github/workspace/ \
+                --cpuset-cpus="0-$(($(nproc)-1))" \
+                -v $PWD/github/workspace/:/github/workspace/ \
+                -it gmt_sdk  # /module/create_build.sh 1.14.0 $(date "+%Y%m%d")-test2
     
     # Test SDK
     docker run --cpuset-cpus="0-$(($(nproc)-1))" \
-               -e PAT -e ocs_core_fwk_pull_requests \
+               -e PAT \
+               $(egrep '_pull_requests' ../.github/workflows/release_candidates.yaml | cut -f1 -d: | sed 's/^/-e/g') \
                -v $PWD/github/workspace/:/github/workspace/ \
                gmt_sdk \
-               /module/test_build.sh 1.10.1 $(date "+%Y%m%d")-test
+               /module/test_build.sh 1.14.0 $(date "+%Y%m%d")-test
     
 Running over GitHub actions (official release)
 ----------------------------------------------
@@ -112,6 +97,7 @@ Updating release versions
     git pull upstream master
     # change version numbers
     gsed -i 's/@version.*".*"/@version   = "'$release_version'"/g' src/core/*.coffee
+    gsed -i 's/\.version.*".*"/\.version "'$release_version'"/g' src/core/*.coffee
     gsed -i 's/version:.*"[0-9].*/version:        "'$release_version'"/g' src/core/*.coffee
     # add files
     git add -A
@@ -172,7 +158,7 @@ Creating release tags on all repositories
     gh auth login -p ssh -h github.com
 
     gh config set prompt disabled
-    for repo in ocs_core_fwk ocs_dev_fwk ocs_sys  ocs_ctrl_fwk ocs_dp_fwk ocs_io_fwk ocs_pers_fwk ocs_test_fwk ocs_ui_fwk ocs_log_sys ocs_alarm_sys ocs_tele_sys ocs_conf_sys ocs_sup_sys ocs_da_sys ocs_app_sys ocs_seq_sys ocs_boost_ext ocs_eigen_ext ocs_nanomsg_ext ocs_msgpack_ext ocs_isample_dcs ocs_hdk_dcs 
+    for repo in ocs_core_fwk ocs_dev_fwk ocs_sys  ocs_ctrl_fwk ocs_dp_fwk ocs_io_fwk ocs_pers_fwk ocs_test_fwk ocs_ui_fwk ocs_log_sys ocs_alarm_sys ocs_tele_sys ocs_conf_sys ocs_sup_sys ocs_data_sys ocs_app_sys ocs_seq_sys ocs_boost_ext ocs_eigen_ext ocs_nanomsg_ext ocs_msgpack_ext ocs_isample_dcs ocs_hdk_dcs 
     do
         echo "Tagging $repo"
         gh release create $release_tag -t $release_tag -R GMTO/$repo

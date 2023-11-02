@@ -62,10 +62,19 @@ fi
 gds init tt123_dcs
 gds env
 
+# Test dependencies
+# MONGODB
+nohup mongod > /dev/null &
+sleep 10
+
 # test services
-#cs start
-#cs status
-#grs get sup_server -f faults | grep "'ACTIVE'"
+cs start
+cs status
+
+sleep 10
+
+#echo "press enter to continue"
+#read
 
 # Clone core frameworks
 cd $HOME
@@ -80,21 +89,19 @@ do
 done
 cd ..
 
+# NodeJS release test
+# todo:
+#log_client query -e '{src: "log_client_app"}' -m 5 -o json_raw
+#tele_client query -e '{src: "sup_server/s/op_state/value"}' -m 10000 -t 2000
+#tele_client query -e '{src: "sup_server/s/op_state/value"}' -m 100
+#tele_client query -e '{src: "sup_server/s/op_state/value"}'
+#grs db query tele_query_server -e '{src: {$regex: /alarm_server/}}' -m 10 -o payload
+#grs db query tele_query_server -e '{src: {$regex: /alarm_server/}}' --sort '{ts: -1}' -t 3000
+#grs db query tele_query_server -e '{src: {$regex: /alarm_server/}}' -m 1000
+#grs db query tele_query_server -e '{src: "sup_server/s/op_state/value"}'
+
 # C++ release test
-echo -e "$CL Installing and running C++ test dependencies $NC"
-# MONGODB
-printf '[mongodb-org-4]\nname=MongoDB Repository\nbaseurl=https://repo.mongodb.org/yum/redhat/7/mongodb-org/4.2/x86_64/\ngpgcheck=1\nenabled=1\ngpgkey=https://www.mongodb.org/static/pgp/server-4.2.asc'> /etc/yum.repos.d/mongodb-org-4.repo
-dnf -y install mongodb-org && dnf clean all
-sed -i 's/.*dbPath:.*/  dbPath: \/data\/mongo\//g' /etc/mongod.conf
-mv /var/lib/mongo/ /data/
-mkdir -p /data/db
-mongod > /dev/null &
-sleep 10
-# Services
-log_server&
-tele_server&
-tele_query_server&
-echo "=="
+echo -e "$CL Running C++ tests $NC"
 cd $GMT_GLOBAL/test/ocs_core_fwk/bin/
 for i in *
 do
@@ -122,12 +129,17 @@ cd $HOME
 
 # add nanocat path to the PATH env var
 export PATH=$PATH:$GMT_GLOBAL/ext/bin/
-cd ocs_core_fwk/test/py/test/
-for i in *.py
-do
-  echo "Running test: $i"
-  python $i
-  sleep 0.2
+cd ocs_core_fwk/test/py/
+for dir in $(ls -d $PWD/*/)
+  do
+  echo "Testing framework: $dir"
+  cd $dir
+  for i in *.py
+  do
+    echo "Running test: $i"
+    python $i
+    sleep 0.2
+  done
 done
 
 # test isample
