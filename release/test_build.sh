@@ -130,6 +130,9 @@ cd $HOME
 # add nanocat path to the PATH env var
 export PATH=$PATH:$GMT_GLOBAL/ext/bin/
 cd ocs_core_fwk/test/py/
+
+cp -fr ocs_core_fwk/conf/core_fwk/ $GMT_GLOBAL/etc/conf/ # FIXME: copying config files should not be necessary
+
 for dir in $(ls -d $PWD/*/)
   do
   echo "Testing framework: $dir"

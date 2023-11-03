@@ -30,7 +30,7 @@ Running locally (requires docker)
                 -v $PWD/github/workspace/:/github/workspace/ \
                 --cpuset-cpus="0-$(($(nproc)-1))" \
                 -v $PWD/github/workspace/:/github/workspace/ \
-                -it gmt_sdk  # /module/create_build.sh 1.14.0 $(date "+%Y%m%d")-test2
+                -it gmt_sdk  # /module/create_build.sh 1.14.0 $(date "+%Y%m%d")-test
     
     # Test SDK
     docker run --cpuset-cpus="0-$(($(nproc)-1))" \
