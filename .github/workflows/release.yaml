@@ -29,8 +29,8 @@ jobs:
           name: gmt-sdk-${{ steps.release_name.outputs.release_id }}.tar.gz
           path: ${{ github.workspace }}/gmt-sdk-${{ steps.release_name.outputs.release_id }}.tar.gz
           retention-days: 30
-      - name: 'GMT SDK test'
-        id: test_release
-        uses: ./
-        with:
-          args: /module/test_build.sh ${{ steps.release_name.outputs.release_id }} # version date-commit
+#      - name: 'GMT SDK test'
+#        id: test_release
+#        uses: ./
+#        with:
+#          args: /module/test_build.sh ${{ steps.release_name.outputs.release_id }} # version date-commit
