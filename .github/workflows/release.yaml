@@ -1,6 +1,6 @@
 on:
-  release:
-    types: [published]
+  # FIXME: disabled, will only be invoked manually
+  workflow_dispatch:
 
 jobs:
   gmt_checks:
