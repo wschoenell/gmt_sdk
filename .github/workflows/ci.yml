@@ -32,4 +32,10 @@ jobs:
             gds clone --bundle ocs_sdk_bundle
             gds build --bundle ocs_sdk_bundle
             # gds test  --bundle ocs_sdk_bundle
-            tar zcvf ~/gmt-sdk.tar.gz --exclude test --exclude modules --exclude node_modules --exclude python_modules -C /opt/gmt .
+            tar zcvf ${{ github.workspace }}/gmt-sdk.tar.gz --exclude test --exclude modules --exclude node_modules --exclude python_modules -C /opt/gmt .
+        - name: Upload SDK artifact
+          uses: actions/upload-artifact@v2
+          with:
+              name: gmt-sdk.tar.gz
+              path: ${{ github.workspace }}/gmt-sdk.tar.gz
+              retention-days: 30
