@@ -6,6 +6,8 @@ on:
         branches: [master]
     pull_request:
         branches: [master]
+    schedule:
+        - cron: '0 7 * * *'
 
 jobs:
   build:
@@ -28,11 +30,25 @@ jobs:
 
         - name: Build SDK components
           run: |
+            echo "::group::setup gds"
             source /root/.bashrc
+            echo "::endgroup::"
+
+            echo "::group::gds clone"
             gds clone --bundle ocs_sdk_bundle
+            echo "::endgroup::"
+
+            echo "::group::gds build"
             gds build --bundle ocs_sdk_bundle
+            echo "::endgroup::"
+
+            echo "::group::gds test"
             # gds test  --bundle ocs_sdk_bundle
+            echo "::endgroup::"
+
+            echo "::group::packaging"
             tar zcvf /tmp/gmt-sdk.tar.gz --exclude test --exclude modules --exclude node_modules --exclude python_modules -C /opt/gmt .
+            echo "::endgroup::"
         - name: Upload SDK artifact
           uses: actions/upload-artifact@v4
           with:
