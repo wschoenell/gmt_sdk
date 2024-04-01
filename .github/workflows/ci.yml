@@ -1,0 +1,57 @@
+name: CI
+
+on:
+    workflow_dispatch:
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
+    schedule:
+        - cron: '0 7 * * *'
+
+jobs:
+  build:
+    runs-on: self-hosted
+    container:
+        image: ghcr.io/gmto/gmt-base-os:alma9
+    steps:
+        - name: Clone dev_fwk
+          uses: actions/checkout@v4
+          with:
+            repository: GMTO/ocs_dev_fwk
+            ref: master
+            token: ${{secrets.GH_PAT}}
+            path: ocs_dev_fwk
+
+        - name: Install dev_fwk
+          uses: ./ocs_dev_fwk/etc/ci/actions/setup-gmt
+          with:
+            token: ${{secrets.GH_PAT}}
+
+        - name: Build SDK components
+          run: |
+            echo "::group::setup gds"
+            source /root/.bashrc
+            echo "::endgroup::"
+
+            echo "::group::gds clone"
+            gds clone --bundle ocs_sdk_bundle
+            echo "::endgroup::"
+
+            echo "::group::gds build"
+            gds build --bundle ocs_sdk_bundle
+            echo "::endgroup::"
+
+            echo "::group::gds test"
+            # gds test  --bundle ocs_sdk_bundle
+            echo "::endgroup::"
+
+            echo "::group::packaging"
+            tar zcvf /tmp/gmt-sdk.tar.gz --exclude test --exclude modules --exclude node_modules --exclude python_modules -C /opt/gmt .
+            echo "::endgroup::"
+        - name: Upload SDK artifact
+          uses: actions/upload-artifact@v4
+          with:
+              name: gmt-sdk.tar.gz
+              path: /tmp/gmt-sdk.tar.gz
+              retention-days: 30
