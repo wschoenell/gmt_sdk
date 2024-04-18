@@ -29,6 +29,7 @@ jobs:
             token: ${{secrets.GH_PAT}}
 
         - name: Build SDK components
+          id: build_sdk
           run: |
             echo "::group::setup gds"
             source /root/.bashrc
@@ -47,11 +48,13 @@ jobs:
             echo "::endgroup::"
 
             echo "::group::packaging"
-            tar zcvf /tmp/gmt-sdk.tar.gz --exclude test --exclude modules --exclude node_modules --exclude python_modules -C /opt/gmt .
+            sdk=gmt-sdk-$(date -u +"%Y%m%d-%H%M%S").tar.gz
+            echo sdk="$sdk" >> $GITHUB_OUTPUT
+            tar zcvf /tmp/"$sdk" --exclude test --exclude modules --exclude node_modules --exclude python_modules --exclude package-lock.json -C /opt/gmt .
             echo "::endgroup::"
         - name: Upload SDK artifact
           uses: actions/upload-artifact@v4
           with:
-              name: gmt-sdk.tar.gz
-              path: /tmp/gmt-sdk.tar.gz
+              name: ${{ steps.build_sdk.outputs.sdk }}
+              path: /tmp/${{ steps.build_sdk.outputs.sdk }}
               retention-days: 30
