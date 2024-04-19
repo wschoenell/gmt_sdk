@@ -43,8 +43,29 @@ jobs:
             gds build --bundle ocs_sdk_bundle
             echo "::endgroup::"
 
+            echo "::group::gds install"
+            gds install --bundle ocs_sdk_bundle
+            echo "::endgroup::"
+
+            echo "::group::grs compile"
+            grs compile core_fwk
+            grs compile ctrl_fwk
+            grs compile dp_fwk
+            grs compile io_fwk
+            grs compile pers_fwk
+            grs compile ui_fwk
+            grs compile log_sys
+            grs compile alarm_sys
+            grs compile tele_sys
+            grs compile conf_sys
+            grs compile sup_sys
+            grs compile data_sys
+            grs compile app_sys
+            grs compile seq_sys
+            echo "::endgroup::"
+
             echo "::group::gds test"
-            # gds test  --bundle ocs_sdk_bundle
+            # gds test --bundle ocs_sdk_bundle
             echo "::endgroup::"
 
             echo "::group::packaging"
