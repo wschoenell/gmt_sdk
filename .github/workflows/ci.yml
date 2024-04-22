@@ -28,6 +28,12 @@ jobs:
           with:
             token: ${{secrets.GH_PAT}}
 
+        - name: SDK version
+          id: sdk_version
+          run: |
+            sdk=gmt-sdk-$(date -u +"%Y%m%d-%H%M%S").tar.gz
+            echo sdk="$sdk" >> $GITHUB_OUTPUT
+
         - name: Build SDK components
           id: build_sdk
           run: |
@@ -69,13 +75,11 @@ jobs:
             echo "::endgroup::"
 
             echo "::group::packaging"
-            sdk=gmt-sdk-$(date -u +"%Y%m%d-%H%M%S").tar.gz
-            echo sdk="$sdk" >> $GITHUB_OUTPUT
-            tar zcvf /tmp/"$sdk" --exclude test --exclude modules --exclude node_modules --exclude python_modules --exclude package-lock.json -C /opt/gmt .
+            tar zcvf /tmp/${{ steps.sdk_version.outputs.sdk }} --exclude test --exclude ./modules --exclude ./node_modules --exclude ./python_modules --exclude ./package-lock.json -C /opt/gmt .
             echo "::endgroup::"
         - name: Upload SDK artifact
           uses: actions/upload-artifact@v4
           with:
-              name: ${{ steps.build_sdk.outputs.sdk }}
-              path: /tmp/${{ steps.build_sdk.outputs.sdk }}
+              name: ${{ steps.sdk_version.outputs.sdk }}
+              path: /tmp/${{ steps.sdk_version.outputs.sdk }}
               retention-days: 30
