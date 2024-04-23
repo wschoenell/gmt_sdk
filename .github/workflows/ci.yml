@@ -13,7 +13,9 @@ jobs:
   build:
     runs-on: self-hosted
     container:
-        image: ghcr.io/gmto/gmt-base-os:alma9
+        image: ghcr.io/gmto/gmt-os-dev:latest
+    outputs:
+        sdk: ${{ steps.sdk_version.outputs.sdk }}
     steps:
         - name: Clone dev_fwk
           uses: actions/checkout@v4
@@ -22,18 +24,15 @@ jobs:
             ref: master
             token: ${{secrets.GH_PAT}}
             path: ocs_dev_fwk
-
         - name: Install dev_fwk
           uses: ./ocs_dev_fwk/etc/ci/actions/setup-gmt
           with:
             token: ${{secrets.GH_PAT}}
-
         - name: SDK version
           id: sdk_version
           run: |
             sdk=gmt-sdk-$(date -u +"%Y%m%d-%H%M%S").tar.gz
             echo sdk="$sdk" >> $GITHUB_OUTPUT
-
         - name: Build SDK components
           id: build_sdk
           run: |
@@ -73,7 +72,6 @@ jobs:
             echo "::group::gds test"
             # gds test --bundle ocs_sdk_bundle
             echo "::endgroup::"
-
         - name: Collect Hashes
           run: |
             echo "::group::collect hashes"
@@ -85,12 +83,15 @@ jobs:
               git rev-parse --short HEAD
               cd ..
             done >> /opt/gmt/etc/GIT_MANIFEST.txt
+            cat /opt/gmt/etc/GIT_MANIFEST.txt
             echo "::endgroup::"
         - name: Collect version files
           run: |
               echo "::group::collect version files"
               cp /root/rt_version.txt /opt/gmt/etc/rt_version.txt
               cp /root/python_version.txt /opt/gmt/etc/python_version.txt
+              cat /opt/gmt/etc/rt_version.txt
+              cat /opt/gmt/etc/python_version.txt
               echo "::endgroup::"
         - name: Packaging
           run: |
@@ -103,3 +104,46 @@ jobs:
               name: ${{ steps.sdk_version.outputs.sdk }}
               path: /tmp/${{ steps.sdk_version.outputs.sdk }}
               retention-days: 30
+
+  test:
+    runs-on: ubuntu-22.04
+    needs: build
+    container:
+        image: ghcr.io/gmto/gmt-os:latest
+    steps:
+        - name: Download SDK artifact
+          uses: actions/download-artifact@v4
+          with:
+              name: ${{ needs.build.outputs.sdk }}
+              path: /tmp/sdk
+
+        - name: Extract SDK artifact
+          run: |
+            echo "::group::extract"
+            mkdir -p /opt/gmt
+            tar zxvf /tmp/sdk/${{ needs.build.outputs.sdk }} -C /opt/gmt
+            echo "::endgroup::"
+
+        - name: Install SDK
+          run: |
+            cd /opt/gmt
+            export GMT_GLOBAL=`pwd`
+            export GMT_LOCAL=`pwd`
+            source $GMT_GLOBAL/bin/gmt_env.sh
+
+            python -m venv python_modules --prompt gmt
+
+            source $GMT_GLOBAL/bin/gmt_env.sh
+            npm install --no-audit --progress=false
+            pip install -r requirements.txt -r requirements-dev.txt
+
+        - name: Run tests
+          run: |
+            echo "::group::run tests"
+            export GMT_GLOBAL=/opt/gmt
+            export GMT_LOCAL=/opt/gmt
+            source /opt/gmt/bin/gmt_env.sh
+            gds --version
+            gds env
+            gds info
+            echo "::endgroup::"
