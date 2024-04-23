@@ -74,8 +74,28 @@ jobs:
             # gds test --bundle ocs_sdk_bundle
             echo "::endgroup::"
 
+        - name: Collect Hashes
+          run: |
+            echo "::group::collect hashes"
+            cd /opt/gmt/modules
+            for repo in *
+            do
+              cd $repo
+              echo -n "$repo: "
+              git rev-parse --short HEAD
+              cd ..
+            done >> /opt/gmt/etc/GIT_MANIFEST.txt
+            echo "::endgroup::"
+        - name: Collect version files
+          run: |
+              echo "::group::collect version files"
+              cp /root/rt_version.txt /opt/gmt/etc/rt_version.txt
+              cp /root/python_version.txt /opt/gmt/etc/python_version.txt
+              echo "::endgroup::"
+        - name: Packaging
+          run: |
             echo "::group::packaging"
-            tar zcvf /tmp/${{ steps.sdk_version.outputs.sdk }} --exclude test --exclude ./modules --exclude ./node_modules --exclude ./python_modules --exclude ./package-lock.json -C /opt/gmt .
+            tar zcvf /tmp/${{ steps.sdk_version.outputs.sdk }} --exclude ./modules --exclude ./node_modules --exclude ./python_modules --exclude ./package-lock.json -C /opt/gmt .
             echo "::endgroup::"
         - name: Upload SDK artifact
           uses: actions/upload-artifact@v4
