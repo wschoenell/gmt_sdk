@@ -96,7 +96,14 @@ jobs:
         - name: Packaging
           run: |
             echo "::group::packaging"
-            tar zcvf /tmp/${{ steps.sdk_version.outputs.sdk }} --exclude ./modules --exclude ./node_modules --exclude ./python_modules --exclude ./package-lock.json -C /opt/gmt .
+
+            rm -rf /opt/gmt/modules
+            rm -rf /opt/gmt/python_modules
+
+            mkdir /opt/gmt/modules
+            /opt/gmt/ext/bin/python -m venv /opt/gmt/python_modules --prompt gmt
+
+            tar zcvf /tmp/${{ steps.sdk_version.outputs.sdk }} --exclude ./node_modules --exclude ./package-lock.json -C /opt/gmt .
             echo "::endgroup::"
         - name: Upload SDK artifact
           uses: actions/upload-artifact@v4
@@ -126,14 +133,11 @@ jobs:
 
         - name: Install SDK
           run: |
+            export GMT_GLOBAL=/opt/gmt
+            export GMT_LOCAL=/opt/gmt
+            source $GMT_GLOBAL/bin/gmt_env.sh
+
             cd /opt/gmt
-            export GMT_GLOBAL=`pwd`
-            export GMT_LOCAL=`pwd`
-            source $GMT_GLOBAL/bin/gmt_env.sh
-
-            python -m venv python_modules --prompt gmt
-
-            source $GMT_GLOBAL/bin/gmt_env.sh
             npm install --no-audit --progress=false
             pip install -r requirements.txt -r requirements-dev.txt
 
@@ -143,6 +147,7 @@ jobs:
             export GMT_GLOBAL=/opt/gmt
             export GMT_LOCAL=/opt/gmt
             source /opt/gmt/bin/gmt_env.sh
+
             gds --version
             gds env
             gds info
