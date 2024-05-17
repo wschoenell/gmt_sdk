@@ -106,7 +106,6 @@ jobs:
             tar zcvf /tmp/${{ steps.sdk_version.outputs.sdk }} --exclude ./node_modules --exclude ./package-lock.json -C /opt/gmt .
             echo "::endgroup::"
         - name: Upload SDK artifact
-          if: false
           uses: actions/upload-artifact@v4
           with:
               name: ${{ steps.sdk_version.outputs.sdk }}
@@ -120,7 +119,6 @@ jobs:
         image: ghcr.io/gmto/gmt-os:latest
     steps:
         - name: Download SDK artifact
-          if: false
           uses: actions/download-artifact@v4
           with:
               name: ${{ needs.build.outputs.sdk }}
@@ -135,7 +133,6 @@ jobs:
             echo "::endgroup::"
 
         - name: Install SDK
-          if: false
           run: |
             export GMT_GLOBAL=/opt/gmt
             export GMT_LOCAL=/opt/gmt
@@ -146,7 +143,6 @@ jobs:
             pip install -r requirements.txt -r requirements-dev.txt
 
         - name: Run tests
-          if: false
           run: |
             echo "::group::run tests"
             export GMT_GLOBAL=/opt/gmt
