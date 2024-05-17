@@ -125,7 +125,6 @@ jobs:
               path: /tmp/sdk
 
         - name: Extract SDK artifact
-          if: false
           run: |
             echo "::group::extract"
             mkdir -p /opt/gmt
