@@ -44,11 +44,15 @@ jobs:
             gds clone --bundle ocs_sdk_bundle
             echo "::endgroup::"
 
+            echo "::group::gds install (pre-build)"
+            gds install --bundle ocs_sdk_bundle
+            echo "::endgroup::"
+
             echo "::group::gds build"
             gds build --bundle ocs_sdk_bundle
             echo "::endgroup::"
 
-            echo "::group::gds install"
+            echo "::group::gds install (post-build)"
             gds install --bundle ocs_sdk_bundle
             echo "::endgroup::"
 
