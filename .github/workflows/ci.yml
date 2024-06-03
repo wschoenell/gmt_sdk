@@ -113,7 +113,7 @@ jobs:
             mkdir /opt/gmt/modules
             /opt/gmt/ext/bin/python -m venv /opt/gmt/python_modules --prompt gmt
 
-            tar zcvf /tmp/${{ steps.sdk_version.outputs.sdk }} --exclude ./node_modules --exclude ./package-lock.json -C /opt/gmt .
+            tar zcvf /tmp/${{ steps.sdk_version.outputs.sdk }} --exclude ./node_modules --exclude ./package-lock.json --exclude '*.map' -C /opt/gmt .
             echo "::endgroup::"
         - name: Upload SDK artifact
           uses: actions/upload-artifact@v4
